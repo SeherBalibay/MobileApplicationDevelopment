@@ -13,12 +13,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import msku.ceng.madlab.week6.placeholder.PlaceholderContent;
 
 /**
  * A fragment representing a list of Items.
  */
 public class MovieFragment extends Fragment {
+    List<Movie> movies =new ArrayList<>();
 
     OnMovieSelected listener;
 
@@ -51,23 +56,40 @@ public class MovieFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-    }
+
+        movies.add(new Movie("The Shawshank Redemption","Frank Darabont",1994,
+                Arrays.asList(new String[]{"Tim Robbins", "Morgan Freeman", "Bob Gunton"}),
+                "Two imprisoned men bond over a number of years, " +
+                        "finding solace and eventual redemption through acts of common decency."));
+        movies.add(new Movie("The Godfather","Francis Ford Coppola",1972,
+                Arrays.asList(new String[]{"Marlon Brando", "Al Pacino", " James Caan"}),
+                "The aging patriarch of an organized crime dynasty transfers control of his "
+                        +
+                        "clandestine empire to his reluctant son."));
+        movies.add(new Movie("Pulp Fiction","Quentin Tarantino",1994,
+                Arrays.asList(new String[]{"John Travolta", "Uma Thurman", "Samuel L. Jackson"}),
+                        "The aging patriarch of an organized crime dynasty transfers control of " +"his clandestine empire to his reluctant son."));
+}
+
+
+
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
+            int mColumnCount=1;
+
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyMovieRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            recyclerView.setAdapter(new MyMovieRecyclerViewAdapter(movies,listener));
         }
         return view;
     }
